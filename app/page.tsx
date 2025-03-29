@@ -1,10 +1,12 @@
-import { Appsidebar } from "@/components/sidebar-demo";
+import { LoginForm } from "@/components/login-form";
+import DashboardLayout from "@/components/sidebar-demo";
 
 export default function Home() {
   return (
-    <div className="dark">
-      <Appsidebar />
-      
-    </div>
+   <div className="flex min-h-svh flex-col items-center justify-center bg-muted p-6 md:p-10">
+         <div className="w-full max-w-sm md:max-w-3xl">
+           <LoginForm />
+         </div>
+       </div>
   );
 }

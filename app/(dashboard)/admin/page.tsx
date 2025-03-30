@@ -1,4 +1,3 @@
-import UserCard from "@/components/ui/UserCard";
 import Announcements from "@/components/Announcements";
 export default function DashboardPage() {
   return (
@@ -6,12 +5,7 @@ export default function DashboardPage() {
       {/* Left Side */}
       <div className="w-full lg:w-2/3">
         <div className="flex  gap-4  justify-between flex-wrap">
-          <UserCard type="student"></UserCard>
-          <UserCard type="student"></UserCard>
-
-          <UserCard type="student"></UserCard>
-
-          <UserCard type="student"></UserCard>
+      
         </div>
       </div>
       {/* Right  Side */}

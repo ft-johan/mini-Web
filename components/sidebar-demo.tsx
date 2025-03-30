@@ -5,16 +5,13 @@ import {
   IconArrowLeft,
   IconBrandTabler,
   IconSearch,
-  IconSettings,
   IconUserBolt,
-  IconPhone,
   IconSpeakerphone,
   IconLink
 } from "@tabler/icons-react";
 import Link from "next/link";
 import { motion } from "motion/react";
 import Image from "next/image";
-import { cn } from "@/lib/utils";
 
 export default function DashboardLayout({
   children,

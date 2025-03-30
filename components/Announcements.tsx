@@ -11,7 +11,7 @@ const supabase = createClient(
 
 const Announcements = () => {
   const [announcements, setAnnouncements] = useState<
-    {  title: string; description: string; created_at: string }[]
+    { title: string; description: string; created_at: string }[]
   >([]);
 
   useEffect(() => {
@@ -42,8 +42,8 @@ const Announcements = () => {
       </div>
       <div className="flex flex-col gap-4 mt-4">
         {announcements.length > 0 ? (
-          announcements.map((notice) => (
-            <div className="bg-gray-100 rounded-md p-4">
+          announcements.map((notice, index) => (
+            <div key={notice.created_at || index} className="bg-gray-100 rounded-md p-4">
               <div className="flex items-center justify-between">
                 <h2 className="font-medium">{notice.title}</h2>
                 <span className="text-xs text-gray-500 bg-white rounded-md px-2 py-1">

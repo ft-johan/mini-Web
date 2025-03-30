@@ -1,5 +1,4 @@
 import { LoginForm } from "@/components/login-form";
-import DashboardLayout from "@/components/sidebar-demo";
 
 export default function Home() {
   return (

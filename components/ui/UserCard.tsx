@@ -1,4 +1,4 @@
-const UserCard = ({type}:{type:string}) => {
+const UserCard = () => {
     return (
         <div className="rounded-2xl odd:bg-gray-900 even:bg-gray-800 p-4 flex-1 min-w-[130px]">
             <div className="flex justify-between items-center ">

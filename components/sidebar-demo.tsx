@@ -8,7 +8,8 @@ import {
   IconSettings,
   IconUserBolt,
   IconPhone,
-  IconSpeakerphone
+  IconSpeakerphone,
+  IconLink
 } from "@tabler/icons-react";
 import Link from "next/link";
 import { motion } from "motion/react";
@@ -49,6 +50,13 @@ export default function DashboardLayout({
       href: "/announcements",
       icon: (
         <IconSpeakerphone className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
+      ),
+    },
+    {
+      label: "Useful Links",
+      href: "/usefullinks",
+      icon: (
+        <IconLink className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
       ),
     },
     {

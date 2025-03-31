@@ -25,12 +25,7 @@ export function LoginForm({
             </div>
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="m@example.com"
-                required
-              />
+              <input id="email" name="email" type="email" required />
             </div>
             <div className="grid gap-2">
               <div className="flex items-center">
@@ -42,9 +37,9 @@ export function LoginForm({
                   Forgot your password?
                 </a>
               </div>
-              <Input id="password" type="password" required />
+              <input id="password" name="password" type="password" required />
             </div>
-              <button formAction={login}>Log in</button>
+            <button formAction={login}>Log in</button>
               <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
                 <span className="relative z-10 bg-background px-2 text-muted-foreground">
                   Or continue with

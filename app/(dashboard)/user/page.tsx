@@ -30,13 +30,7 @@ interface User {
 
 export default function UserManagement() {
   const [users, setUsers] = useState<User[]>([]);
-  const [newUser, setNewUser] = useState({
-    name: '',
-    email: '',
-    collegeid: '',
-    bio: '',
-    profile_pic_path: '',
-  });
+
 
   useEffect(() => {
     fetchUsers();

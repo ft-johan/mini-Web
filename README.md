@@ -1,4 +1,10 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/acd1b2ac-7088-4929-afb2-bde16a80e2fe" alt="icon" width="150">
+</p>
+
+<h3 align="center">CampusZone</h3>
+
+CampusZone is a comprehensive Flutter mobile application designed to enhance campus life by providing a centralized platform for students to connect, share resources, and stay informed about campus activities.
 
 ## Abstract
 

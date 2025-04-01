@@ -3,6 +3,16 @@
 import { useEffect, useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import Image from 'next/image';
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 
 // Supabase Client Setup
 const supabase = createClient(
@@ -66,103 +76,41 @@ export default function UserManagement() {
   }
 
   return (
-    <div className="bg-black text-amber-50 p-4 rounded-lg">
-      <h1 className="text-xl font-bold mb-4">User Management</h1>
+    <div className="bg-neutral-950 text-amber-50 p-6 w-full rounded-l-2xl  m-1">
+      <h1 className="text-4xl font-bold my-8">User Management</h1>
 
-      {/* Add User Form */}
-      <div className="flex flex-col gap-2 mb-4">
-        <input
-          type="text"
-          placeholder="Name"
-          value={newUser.name}
-          onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
-          className="p-2 rounded bg-gray-700 text-white"
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          value={newUser.email}
-          onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
-          className="p-2 rounded bg-gray-700 text-white"
-        />
-        <input
-          type="text"
-          placeholder="College ID"
-          value={newUser.collegeid}
-          onChange={(e) => setNewUser({ ...newUser, collegeid: e.target.value })}
-          className="p-2 rounded bg-gray-700 text-white"
-        />
-        <input
-          type="text"
-          placeholder="Bio"
-          value={newUser.bio}
-          onChange={(e) => setNewUser({ ...newUser, bio: e.target.value })}
-          className="p-2 rounded bg-gray-700 text-white"
-        />
-        <input
-          type="text"
-          placeholder="Profile Picture URL"
-          value={newUser.profile_pic_path}
-          onChange={(e) => setNewUser({ ...newUser, profile_pic_path: e.target.value })}
-          className="p-2 rounded bg-gray-700 text-white"
-        />
-        <button onClick={addUser} className="bg-green-500 p-2 rounded text-white hover:bg-green-600">
-          Add User
-        </button>
-      </div>
 
       {/* Users Table */}
-      <table className="w-full border-collapse border border-gray-500 text-white">
-        <thead>
-          <tr className="bg-gray-800">
-            <th className="border border-gray-600 p-2">ID</th>
-            <th className="border border-gray-600 p-2">Name</th>
-            <th className="border border-gray-600 p-2">Email</th>
-            <th className="border border-gray-600 p-2">College ID</th>
-            <th className="border border-gray-600 p-2">Bio</th>
-            <th className="border border-gray-600 p-2">Profile Picture</th>
-            <th className="border border-gray-600 p-2">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user) => (
-            <tr key={user.id} className="bg-gray-900">
-              <td className="border border-gray-600 p-2">{user.id}</td>
-              <td className="border border-gray-600 p-2">{user.name}</td>
-              <td className="border border-gray-600 p-2">{user.email}</td>
-              <td className="border border-gray-600 p-2">{user.collegeid}</td>
-              <td className="border border-gray-600 p-2">{user.bio || 'N/A'}</td>
-              <td className="border border-gray-600 p-2">
-                {user.profile_pic_path ? (
-                  <Image
-                    src={user.profile_pic_path}
-                    alt={user.name}
-                    width={50}
-                    height={50}
-                    className="rounded-full"
-                  />
-                ) : (
-                  'No Image'
-                )}
-              </td>
-              <td className="border border-gray-600 p-2 flex gap-2">
-                <button
-                  onClick={() => updateUser(user.id, { name: 'Updated Name' })}
-                  className="bg-blue-500 px-2 py-1 rounded text-white hover:bg-blue-600"
-                >
-                  Edit
-                </button>
-                <button
+     <div className='rounded-md p-4 border-2'>
+   
+      <Table>
+      <TableCaption>A list of your recent Users.</TableCaption>
+      <TableHeader>
+        <TableRow>
+          <TableHead className="w-[100px]">Name</TableHead>
+          <TableHead>Email</TableHead>
+          <TableHead>College Id</TableHead>
+          <TableHead className="text-right">Actions</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {users.map((user) => (
+          <TableRow key={user.name}>
+            <TableCell className="font-medium">{user.name}</TableCell>
+            <TableCell>{user.email}</TableCell>
+            <TableCell>{user.collegeid}</TableCell>
+            <TableCell className="text-right"><button
                   onClick={() => deleteUser(user.id)}
                   className="bg-red-500 px-2 py-1 rounded text-white hover:bg-red-600"
                 >
                   Delete
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+                </button></TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+      
+    </Table>
+    </div>
     </div>
   );
 }

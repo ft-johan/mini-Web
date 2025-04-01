@@ -1,8 +1,9 @@
 import Announcements from "@/components/Announcements";
 import { SectionCards } from "@/components/sectioncard";
+import { Chartcomponent } from "@/components/ui/areachart";
 export default function DashboardPage() {
   return (
-    <div className="p-4 text-amber-50 flex h-full w-full md:flex-row flex-col gap-4 rounded-tl-2xl border  md:p-10 border-neutral-700 bg-neutral-900">
+    <div className="p-4 m-1 text-amber-50 flex h-full w-full md:flex-row flex-col gap-4 rounded-l-2xl border rounded-r-lg  md:p-10 border-neutral-700 bg-neutral-950">
       {/* Left Side */}
       <div className="w-full lg:w-2/3">
      
@@ -15,7 +16,7 @@ export default function DashboardPage() {
              
             </div>
           </div>
-      
+      <Chartcomponent/>
       </div>
       {/* Right  Side */}
       <div className="w-full lg:w-1/3">

@@ -1,104 +1,111 @@
 'use client'
-import { useEffect, useState } from 'react';
-import { createClient } from '@supabase/supabase-js';
+import { useEffect, useState } from "react";
+import { createClient } from "@supabase/supabase-js";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Table, TableBody, TableHead, TableHeader, TableRow, TableCell } from "@/components/ui/table";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
+// Define the Event interface based on the Supabase schema
 interface Event {
-  id: string;
-  title: string;
-  description: string;
+  id: number;
+  name: string;
   date: string;
-  time: string;
   location: string;
-  image_url: string;
-  tags: string;
-  is_active: boolean;
-  organizers: string;
-  register_url: string;
+  description?: string;
+  organizer?: string;
 }
 
 export default function EventsPage() {
   const [events, setEvents] = useState<Event[]>([]);
-  const [newEvent, setNewEvent] = useState<Partial<Event>>({
-    title: '', description: '', date: '', time: '', location: '',
-    image_url: '', tags: '', is_active: true, organizers: '', register_url: ''
-  });
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [editingEvent, setEditingEvent] = useState<Partial<Event> | null>(null);
+  const [openModal, setOpenModal] = useState(false);
+  const [editingEvent, setEditingEvent] = useState<Event | null>(null);
+  const [formData, setFormData] = useState<Event>({ id: 0, name: "", date: "", location: "", description: "", organizer: "" });
 
   useEffect(() => {
     fetchEvents();
   }, []);
 
-  async function fetchEvents() {
-    const { data, error } = await supabase.from('events').select('*');
-    if (error) console.error(error);
-    else setEvents(data as Event[]);
-  }
+  const fetchEvents = async () => {
+    const { data, error } = await supabase.from("events").select("*");
+    if (!error) setEvents(data || []);
+  };
 
-  async function addEvent() {
-    const { data, error } = await supabase.from('events').insert([newEvent]);
-    if (error) console.error(error);
-    else {
-      if (data) {
-        setEvents([...events, data[0] as Event]);
-      }
-      setNewEvent({ title: '', description: '', date: '', time: '', location: '',
-        image_url: '', tags: '', is_active: true, organizers: '', register_url: '' });
-      setIsModalOpen(false);
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async () => {
+    if (editingEvent) {
+      await supabase.from("events").update(formData).eq("id", editingEvent.id);
+    } else {
+      await supabase.from("events").insert([formData]);
     }
-  }
+    setOpenModal(false);
+    setEditingEvent(null);
+    fetchEvents();
+  };
 
-  async function updateEvent() {
-    if (!editingEvent || !editingEvent.id) return;
-    const { error } = await supabase.from('events').update(editingEvent).eq('id', editingEvent.id);
-    if (error) console.error(error);
-    else {
-      setEvents(events.map(event => (event.id === editingEvent.id ? { ...event, ...editingEvent } : event)));
-      setIsEditModalOpen(false);
-      setEditingEvent(null);
-    }
-  }
+  const handleEdit = (event: Event) => {
+    setEditingEvent(event);
+    setFormData(event);
+    setOpenModal(true);
+  };
 
+  const handleDelete = async (id: number) => {
+    await supabase.from("events").delete().eq("id", id);
+    fetchEvents();
+  };
 
   return (
-    <div className="container mx-auto p-6">
-      <h1 className="text-3xl font-bold mb-6">College Events</h1>
-      <button className="bg-blue-500 text-white px-4 py-2 rounded mb-6" onClick={() => setIsModalOpen(true)}>Add Event</button>
-      
-      {(isModalOpen || isEditModalOpen) && (
-        <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
-            <h2 className="text-2xl font-bold mb-4">{isEditModalOpen ? 'Edit Event' : 'Add Event'}</h2>
-            <input className="border p-2 rounded w-full mb-2" type="text" placeholder="Title" value={isEditModalOpen ? editingEvent?.title : newEvent.title}
-              onChange={(e) => (isEditModalOpen ? setEditingEvent({ ...editingEvent, title: e.target.value }) : setNewEvent({ ...newEvent, title: e.target.value }))} />
-            <input className="border p-2 rounded w-full mb-2" type="text" placeholder="Description" value={isEditModalOpen ? editingEvent?.description : newEvent.description}
-              onChange={(e) => (isEditModalOpen ? setEditingEvent({ ...editingEvent, description: e.target.value }) : setNewEvent({ ...newEvent, description: e.target.value }))} />
-            <input className="border p-2 rounded w-full mb-2" type="date" value={isEditModalOpen ? editingEvent?.date : newEvent.date}
-              onChange={(e) => (isEditModalOpen ? setEditingEvent({ ...editingEvent, date: e.target.value }) : setNewEvent({ ...newEvent, date: e.target.value }))} />
-            <input className="border p-2 rounded w-full mb-2" type="text" placeholder="Time" value={isEditModalOpen ? editingEvent?.time : newEvent.time}
-              onChange={(e) => (isEditModalOpen ? setEditingEvent({ ...editingEvent, time: e.target.value }) : setNewEvent({ ...newEvent, time: e.target.value }))} />
-            <input className="border p-2 rounded w-full mb-2" type="text" placeholder="Location" value={isEditModalOpen ? editingEvent?.location : newEvent.location}
-              onChange={(e) => (isEditModalOpen ? setEditingEvent({ ...editingEvent, location: e.target.value }) : setNewEvent({ ...newEvent, location: e.target.value }))} />
-            <input className="border p-2 rounded w-full mb-2" type="text" placeholder="Image URL" value={isEditModalOpen ? editingEvent?.image_url : newEvent.image_url}
-              onChange={(e) => (isEditModalOpen ? setEditingEvent({ ...editingEvent, image_url: e.target.value }) : setNewEvent({ ...newEvent, image_url: e.target.value }))} />
-            <input className="border p-2 rounded w-full mb-2" type="text" placeholder="Tags" value={isEditModalOpen ? editingEvent?.tags : newEvent.tags}
-              onChange={(e) => (isEditModalOpen ? setEditingEvent({ ...editingEvent, tags: e.target.value }) : setNewEvent({ ...newEvent, tags: e.target.value }))} />
-            <input className="border p-2 rounded w-full mb-2" type="text" placeholder="Organizers" value={isEditModalOpen ? editingEvent?.organizers : newEvent.organizers}
-              onChange={(e) => (isEditModalOpen ? setEditingEvent({ ...editingEvent, organizers: e.target.value }) : setNewEvent({ ...newEvent, organizers: e.target.value }))} />
-            <input className="border p-2 rounded w-full mb-2" type="text" placeholder="Registration URL" value={isEditModalOpen ? editingEvent?.register_url : newEvent.register_url}
-              onChange={(e) => (isEditModalOpen ? setEditingEvent({ ...editingEvent, register_url: e.target.value }) : setNewEvent({ ...newEvent, register_url: e.target.value }))} />
-            <button className="bg-green-500 text-white px-4 py-2 rounded mr-2" onClick={isEditModalOpen ? updateEvent : addEvent}>{isEditModalOpen ? 'Update' : 'Save'}</button>
-            <button className="bg-gray-500 text-white px-4 py-2 rounded" onClick={() => { setIsModalOpen(false); setIsEditModalOpen(false); }}>Cancel</button>
-          </div>
-        </div>
-      )}
-      {/**/ }
+    <div className="p-6">
+      <Button onClick={() => setOpenModal(true)}>Add Event</Button>
+      <Table className="mt-4 w-full">
+        <TableHeader>
+          <TableRow>
+            <TableHead>Name</TableHead>
+            <TableHead>Date</TableHead>
+            <TableHead>Location</TableHead>
+            <TableHead>Description</TableHead>
+            <TableHead>Organizer</TableHead>
+            <TableHead>Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {events.map((event) => (
+            <TableRow key={event.id}>
+              <TableCell>{event.name}</TableCell>
+              <TableCell>{event.date}</TableCell>
+              <TableCell>{event.location}</TableCell>
+              <TableCell>{event.description}</TableCell>
+              <TableCell>{event.organizer}</TableCell>
+              <TableCell>
+                <Button variant="outline" onClick={() => handleEdit(event)}>Edit</Button>
+                <Button variant="destructive" onClick={() => handleDelete(event.id)}>Delete</Button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+
+      <Dialog open={openModal} onOpenChange={setOpenModal}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>{editingEvent ? "Edit Event" : "Add Event"}</DialogTitle>
+          </DialogHeader>
+          <Input name="name" placeholder="Event Name" value={formData.name} onChange={handleInputChange} />
+          <Input name="date" type="date" value={formData.date} onChange={handleInputChange} />
+          <Input name="location" placeholder="Location" value={formData.location} onChange={handleInputChange} />
+          <Input name="description" placeholder="Description" value={formData.description} onChange={handleInputChange} />
+          <Input name="organizer" placeholder="Organizer" value={formData.organizer} onChange={handleInputChange} />
+          <Button onClick={handleSubmit}>{editingEvent ? "Update" : "Create"} Event</Button>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

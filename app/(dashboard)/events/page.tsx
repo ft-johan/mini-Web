@@ -65,11 +65,6 @@ export default function EventsPage() {
     }
   }
 
-  async function deleteEvent(id: string) {
-    const { error } = await supabase.from('events').delete().eq('id', id);
-    if (error) console.error(error);
-    else setEvents(events.filter(event => event.id !== id));
-  }
 
   return (
     <div className="container mx-auto p-6">

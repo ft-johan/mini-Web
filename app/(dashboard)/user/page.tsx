@@ -2,13 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
-import Image from 'next/image';
 import {
   Table,
   TableBody,
   TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -52,21 +50,9 @@ export default function UserManagement() {
   }
 
   // Add a New User
-  async function addUser() {
-    const { error } = await supabase.from('users').insert([newUser]);
-    if (error) console.error('Add User Error:', error);
-    else {
-      fetchUsers(); // Refresh list after adding
-      setNewUser({ name: '', email: '', collegeid: '', bio: '', profile_pic_path: '' });
-    }
-  }
+
 
   // Update a User
-  async function updateUser(id: string, updatedData: Partial<User>) {
-    const { error } = await supabase.from('users').update(updatedData).eq('id', id);
-    if (error) console.error('Update Error:', error);
-    else fetchUsers(); // Refresh list after updating
-  }
 
   // Delete a User
   async function deleteUser(id: string) {

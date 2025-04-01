@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+
 import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/sidebar";
 import {
   IconArrowLeft,
@@ -12,6 +12,10 @@ import {
 import Link from "next/link";
 import { motion } from "motion/react";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { createClient } from "@supabase/supabase-js";
+
+const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!);
 
 export default function DashboardLayout({
   children,
@@ -19,6 +23,32 @@ export default function DashboardLayout({
   children: React.ReactNode;
 }) {
   const [open, setOpen] = useState(false);
+  interface User {
+    name: string;
+    profile_pic_path: string;
+  }
+  
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      // Get current session
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session?.user) return;
+
+      // Fetch user data from 'users' table
+      const { data, error } = await supabase
+        .from("users")
+        .select("name, profile_pic_path")
+        .eq("id", session.user.id)
+        .single();
+
+      if (!error) setUser(data);
+    };
+
+    fetchUser();
+  }, []);
+
 
   const links = [
     {
@@ -87,19 +117,19 @@ export default function DashboardLayout({
           </div>
           <div>
             <SidebarLink
-              link={{
-                label: "Manu Arora",
-                href: "#",
-                icon: (
-                  <Image
-                    src="https://assets.aceternity.com/manu.png"
-                    className="h-7 w-7 shrink-0 rounded-full"
-                    width={50}
-                    height={50}
-                    alt="Avatar"
-                  />
-                ),
-              }}
+             link={{
+              label: user?.name || "User",
+              href: "#",
+              icon: (
+                <Image
+                  src={user?.profile_pic_path || "/default-avatar.png"} // Fallback image
+                  className="h-7 w-7 shrink-0 rounded-full"
+                  width={50}
+                  height={50}
+                  alt="User Avatar"
+                />
+              ),
+            }}
             />
           </div>
         </SidebarBody>

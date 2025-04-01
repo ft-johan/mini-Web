@@ -33,8 +33,8 @@ const Announcements = () => {
   }, []);
 
   return (
-    <div className="bg-white p-4 rounded-md">
-      <div className="flex items-center justify-between">
+    <div className="mt-6 shadow-xs border-2 bg-gradient-to-t bg-card p-6 rounded-md">
+      <div className="flex items-center justify-between @container/card">
         <h1 className="text-xl font-semibold">Announcements</h1>
         <Link href="/announcements" className="text-xs text-blue-500 hover:underline">
           View All
@@ -43,14 +43,14 @@ const Announcements = () => {
       <div className="flex flex-col gap-4 mt-4">
         {announcements.length > 0 ? (
           announcements.map((notice, index) => (
-            <div key={notice.created_at || index} className="bg-gray-100 rounded-md p-4">
+            <div key={notice.created_at || index} className="bg-gray-100 font-medium rounded-md p-4">
               <div className="flex items-center justify-between">
-                <h2 className="font-medium">{notice.title}</h2>
+                <h2 className="font-bold font-sans text-black">{notice.title}</h2>
                 <span className="text-xs text-gray-500 bg-white rounded-md px-2 py-1">
                   {new Date(notice.created_at).toLocaleDateString()}
                 </span>
               </div>
-              <p className="text-sm text-gray-600 mt-1">{notice.description}</p>
+              <p className="text-sm text-gray-600 mt-1 font-normal">{notice.description}</p>
             </div>
           ))
         ) : (

@@ -58,20 +58,8 @@ export default function DashboardLayout({
         <IconBrandTabler className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
       ),
     },
-    {
-      label: "Users",
-      href: "/user",
-      icon: (
-        <IconUserBolt className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
-      ),
-    },
-    {
-      label: "Lost and Found",
-      href: "/lostfound",
-      icon: (
-        <IconSearch className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
-      ),
-    },
+    
+    
     {
       label: "Announcement",
       href: "/announcements",
@@ -95,7 +83,7 @@ export default function DashboardLayout({
     },
     {
       label: "Logout",
-      href: "/login",
+      href: "/auth/login",
       icon: (
         <IconArrowLeft className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
       ),

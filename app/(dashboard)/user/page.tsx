@@ -47,7 +47,19 @@ export default function UserManagement() {
 
 
   // Update a User
+  const handleDelete = async (id: string) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this user?");
+    if (!confirmDelete) return;
 
+    const { error } = await supabase.from("users").delete().eq("id", id);
+
+    if (error) {
+      console.error("Error deleting announcement:", error);
+      alert("Failed to delete announcement");
+    } else {
+      setUsers((prev) => prev.filter((item) => item.id !== id));
+    }
+  };
   // Delete a User
   async function deleteUser(id: string) {
     const { error } = await supabase.from('users').delete().eq('id', id);
@@ -80,7 +92,7 @@ export default function UserManagement() {
             <TableCell>{user.email}</TableCell>
             <TableCell>{user.collegeid}</TableCell>
             <TableCell className="text-right"><button
-                  onClick={() => deleteUser(user.id)}
+                  onClick={() => handleDelete(user.id)}
                   className="bg-red-500 px-2 py-1 rounded text-white hover:bg-red-600"
                 >
                   Delete

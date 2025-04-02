@@ -4,8 +4,6 @@ import { Sidebar, SidebarBody, SidebarLink } from "@/components/ui/sidebar";
 import {
   IconArrowLeft,
   IconBrandTabler,
-  IconSearch,
-  IconUserBolt,
   IconSpeakerphone,
   IconLink
 } from "@tabler/icons-react";

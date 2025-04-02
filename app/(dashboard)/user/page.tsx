@@ -61,11 +61,7 @@ export default function UserManagement() {
     }
   };
   // Delete a User
-  async function deleteUser(id: string) {
-    const { error } = await supabase.from('users').delete().eq('id', id);
-    if (error) console.log("error");
-    else fetchUsers(); // Refresh list after deleting
-  }
+  
 
   return (
     <div className="bg-neutral-950 text-amber-50 p-6 w-full rounded-l-2xl  m-1">

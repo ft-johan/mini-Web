@@ -38,9 +38,7 @@ export default function LostAndFound() {
     else setItems(items.filter(item => item.id !== id));
   }
 
-  function getImageUrl(imagePath: string) {
-    return `https://$lkkesknegtnajxfftnqf.supabase.co/storage/v1/object/public/${imagePath}`;
-  }
+ 
 
   return (
     <div className="p-6 w-full">

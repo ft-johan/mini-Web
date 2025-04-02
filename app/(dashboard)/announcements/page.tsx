@@ -73,7 +73,7 @@ const AnnouncementsPage = () => {
   };
 
   return (
-    <div className="p-4  text-amber-50  h-full w-full  gap-4 rounded-tl-2xl border  md:p-10 border-neutral-700 bg-neutral-900">
+    <div className="p-4  text-amber-50  h-full w-full overflow-y-scroll gap-4 rounded-tl-2xl border  md:p-10 border-neutral-700 bg-neutral-900">
       <div className="flex items-center justify-between  mb-4">
         <h1 className="text-2xl font-bold">Announcements</h1>
         <Link href="/" className="text-blue-500 hover:underline">
@@ -83,19 +83,19 @@ const AnnouncementsPage = () => {
 
       {/* Announcement Form */}
       <form onSubmit={handleSubmit} className="bg-white p-4  rounded-md shadow-md mb-6">
-        <h2 className="text-lg text-gray-300 font-semibold mb-2">Add New Announcement</h2>
+        <h2 className="text-lg text-black font-semibold mb-2">Add New Announcement</h2>
         <input
           type="text"
           placeholder="Enter Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="w-full p-2 border bg-gray-300 text-gray-400 rounded-md mb-2"
+          className="w-full p-2 border bg-gray-300 text-gray-700 font-bold rounded-md mb-2"
         />
         <textarea
           placeholder="Enter Description"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          className="w-full p-2 border text-gray-400 bg-gray-300 rounded-md mb-2"
+          className="w-full p-2 border text-gray-800 font-bold bg-gray-300 rounded-md mb-2"
           rows={3}
         />
         <button
@@ -113,7 +113,7 @@ const AnnouncementsPage = () => {
           announcements.map((notice) => (
             <div key={notice.id} className="bg-gray-100 rounded-md p-4 flex justify-between items-center">
               <div>
-                <h2 className="font-medium">{notice.title}</h2>
+                <h2 className="font-bold text-black">{notice.title}</h2>
                 <span className="text-xs text-gray-500 bg-white rounded-md px-2 py-1">
                   {new Date(notice.created_at).toLocaleDateString()}
                 </span>

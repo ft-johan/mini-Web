@@ -51,7 +51,7 @@ export default function UserManagement() {
   // Delete a User
   async function deleteUser(id: string) {
     const { error } = await supabase.from('users').delete().eq('id', id);
-    if (error) console.error('Delete Error:', error);
+    if (error) console.log("error");
     else fetchUsers(); // Refresh list after deleting
   }
 

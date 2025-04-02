@@ -11,21 +11,27 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
-// Define the Event interface based on the Supabase schema
+
 interface Event {
-  id: number;
-  name: string;
+  id: string;
+  title: string;
   date: string;
   location: string;
-  description?: string;
-  organizer?: string;
+  description: string;
+  organizer: string;
 }
 
 export default function EventsPage() {
-  const [events, setEvents] = useState<Event[]>([]);
+  const [events, setEvents] = useState<{
+  id: string;
+  title: string;
+  date: string;
+  location: string;
+  description: string;
+  organizer: string;}[]>([]);
   const [openModal, setOpenModal] = useState(false);
   const [editingEvent, setEditingEvent] = useState<Event | null>(null);
-  const [formData, setFormData] = useState<Event>({ id: 0, name: "", date: "", location: "", description: "", organizer: "" });
+  const [formData, setFormData] = useState<Event>({ id: "", title: "", date: "", location: "", description: "", organizer: "" });
 
   useEffect(() => {
     fetchEvents();
@@ -57,17 +63,28 @@ export default function EventsPage() {
     setOpenModal(true);
   };
 
-  const handleDelete = async (id: number) => {
-    await supabase.from("events").delete().eq("id", id);
-    fetchEvents();
-  };
 
+  const handleDelete = async (id: string) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this announcement?");
+    if (!confirmDelete) return;
+
+    const { error } = await supabase.from("notice").delete().eq("id", id);
+
+    if (error) {
+      console.error("Error deleting announcement:", error);
+      alert("Failed to delete announcement");
+    } else {
+      setEvents((prev) => prev.filter((item) => item.id !== id));
+    }
+  };
   return (
-    <div className="p-6">
+    <div className="bg-neutral-950 text-amber-50 p-6 w-full rounded-l-2xl  m-1">
+        <h1 className="text-4xl text-white my-8 font-bold">Events</h1>
       <Button onClick={() => setOpenModal(true)}>Add Event</Button>
-      <Table className="mt-4 w-full">
+      <div  className="mt-4 p-4 border rounded-2xl">
+      <Table>
         <TableHeader>
-          <TableRow>
+          <TableRow >
             <TableHead>Name</TableHead>
             <TableHead>Date</TableHead>
             <TableHead>Location</TableHead>
@@ -79,26 +96,31 @@ export default function EventsPage() {
         <TableBody>
           {events.map((event) => (
             <TableRow key={event.id}>
-              <TableCell>{event.name}</TableCell>
+              <TableCell>{event.title}</TableCell>
               <TableCell>{event.date}</TableCell>
               <TableCell>{event.location}</TableCell>
               <TableCell>{event.description}</TableCell>
               <TableCell>{event.organizer}</TableCell>
-              <TableCell>
+              <TableCell className="flex gap-2">
                 <Button variant="outline" onClick={() => handleEdit(event)}>Edit</Button>
-                <Button variant="destructive" onClick={() => handleDelete(event.id)}>Delete</Button>
+                <button
+                onClick={() => handleDelete(event.id)}
+                className="bg-red-500 text-white px-3 py-1 rounded-md"
+              >
+                Delete
+              </button>
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
-
+      </div>
       <Dialog open={openModal} onOpenChange={setOpenModal}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>{editingEvent ? "Edit Event" : "Add Event"}</DialogTitle>
           </DialogHeader>
-          <Input name="name" placeholder="Event Name" value={formData.name} onChange={handleInputChange} />
+          <Input name="name" placeholder="Event Name" value={formData.title} onChange={handleInputChange} required/>
           <Input name="date" type="date" value={formData.date} onChange={handleInputChange} />
           <Input name="location" placeholder="Location" value={formData.location} onChange={handleInputChange} />
           <Input name="description" placeholder="Description" value={formData.description} onChange={handleInputChange} />

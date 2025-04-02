@@ -103,7 +103,7 @@ export default function DashboardLayout({
   ];
 
   return (
-    <div className="h-screen dark flex max-w-full flex-1 flex-col overflow-hidden overflow-y-scroll rounded-md border md:flex-row border-neutral-700 bg-neutral-800">
+    <div className="h-screen dark flex max-w-full flex-1 flex-col overflow-hidden overflow-y-scroll rounded-none md:rounded-sm border md:flex-row border-neutral-700 bg-neutral-800">
       {/* Sidebar */}
       <Sidebar open={open} setOpen={setOpen}>
         <SidebarBody className="justify-between gap-10">
